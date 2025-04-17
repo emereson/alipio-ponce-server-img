@@ -1,8 +1,8 @@
-import cors from 'cors';
-import express from 'express';
-import helmet from 'helmet';
-import { uploadImage, deleteImage } from './controllers/imageController.js';
-import { upload } from './utils/image.multer.js';
+import cors from "cors";
+import express from "express";
+import helmet from "helmet";
+import { uploadImage, deleteImage } from "./controllers/imageController.js";
+import { upload } from "./utils/image.multer.js";
 
 const app = express();
 app.use(express.json());
@@ -14,17 +14,16 @@ app.use(
   })
 );
 
-const port = process.env.PORT || 3112;
+const port = process.env.PORT || 3114;
 
+app.post("/image", upload.single("image"), uploadImage);
+app.delete("/delete-image/:id", deleteImage);
 
-app.post('/image', upload.single('image'), uploadImage);
-app.delete('/delete-image/:id', deleteImage);
-
-app.use('/image', express.static('./uploads'));
+app.use("/image", express.static("./uploads"));
 
 app.use((err, req, res, next) => {
   console.error(err.stack);
-  res.status(500).send('Something went wrong!');
+  res.status(500).send("Something went wrong!");
 });
 
 app.listen(port, "0.0.0.0", () => {
